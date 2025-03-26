@@ -1,5 +1,7 @@
 package com.aktie.service;
 
+import java.util.UUID;
+
 import com.aktie.dto.UserDTO;
 import com.aktie.model.EnumRole;
 import com.aktie.model.User;
@@ -21,6 +23,12 @@ public class UserService {
         user.setRole(EnumRole.CUSTOMER);
 
         user.persist();
+    }
+
+    public UserDTO findById(UUID uuid) {
+        User entity = User.findById(uuid);
+
+        return new UserDTO(entity.getName(), entity.getEmail(), null);
     }
 
 }

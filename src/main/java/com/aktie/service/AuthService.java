@@ -1,5 +1,6 @@
 package com.aktie.service;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.eclipse.microprofile.jwt.Claims;
@@ -34,21 +35,22 @@ public class AuthService {
             throw new CustomException(EnumErrorCode.ERRO_LOGIN);
         }
 
-        return generateToken(user.getEmail(), user.getRole());
+        return generateToken(user.getEmail(), user.getId().toString(), user.getRole());
     }
 
-    public TokenDTO generateToken(String email, EnumRole role) {
+    public TokenDTO generateToken(String email, String uuid, EnumRole role) {
         try {
-            JwtClaims jwtClaims = new JwtClaims();
+            var jwtClaims = new JwtClaims();
 
             jwtClaims.setIssuer("SAMPLE-JWT-API");
             jwtClaims.setJwtId(UUID.randomUUID().toString());
+            jwtClaims.setClaim("uuid", uuid);
             jwtClaims.setClaim(Claims.preferred_username.name(), email);
-            jwtClaims.setClaim(Claims.groups.name(), role.getKey());
+            jwtClaims.setClaim(Claims.groups.name(), List.of(role.getKey()));
             jwtClaims.setAudience("using-jwt");
             jwtClaims.setExpirationTimeMinutesInTheFuture(DEFAULT_EXPIRATION_TIME);
 
-            TokenDTO token = new TokenDTO(TokenUtils.generateTokenString(jwtClaims), DEFAULT_EXPIRATION_TIME);
+            var token = new TokenDTO(TokenUtils.generateTokenString(jwtClaims), DEFAULT_EXPIRATION_TIME);
 
             return token;
         } catch (Exception e) {
