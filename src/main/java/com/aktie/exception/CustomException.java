@@ -1,5 +1,7 @@
 package com.aktie.exception;
 
+import com.aktie.model.EnumErrorCode;
+
 public class CustomException extends RuntimeException {
 
     private String errorCode = "-1";

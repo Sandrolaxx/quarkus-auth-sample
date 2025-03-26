@@ -1,4 +1,4 @@
-package com.aktie.service;
+package com.aktie.auth;
 
 import java.io.InputStream;
 import java.security.KeyFactory;
