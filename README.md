@@ -34,12 +34,12 @@ Para usar JWT no **Quarkus**, adicione as seguintes dependências ao `pom.xml` (
 ### 2.2 Configuração no `application.properties`
 Adicione as configurações para habilitar JWT no Quarkus:
 ```properties
-mp.jwt.verify.publickey.location=META-INF/resources/publicKey.pem
-mp.jwt.verify.issuer=https://meu-servidor.com
+mp.jwt.verify.publickey.location=publicKey.pem
+mp.jwt.verify.issuer=SAMPLE-JWT-API
 ```
 
 - `mp.jwt.verify.publickey.location` indica onde está localizado o **chave pública** usada para verificar o JWT.
-- `mp.jwt.verify.issuer` define a origem válida dos tokens.
+- `mp.jwt.verify.issuer` define a origem válida dos tokens, pode ser uma URL.
 
 ### 2.3 Criando uma API Segura
 Crie um endpoint protegido por JWT:
@@ -61,27 +61,22 @@ public class SecureResource {
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    @RolesAllowed({"admin"})
+    @RolesAllowed({"ADMIN"})
     public String securedEndpoint() {
         return "Usuário autenticado: " + jwt.getName();
     }
 }
 ```
 
-- `@RolesAllowed({"admin"})` → Apenas usuários com a role "admin" podem acessar.
+- `@RolesAllowed({"ADMIN"})` → Apenas usuários com a role "ADMIN" podem acessar.
 - `@Inject JsonWebToken jwt` → Permite acessar informações do JWT dentro da API.
 
 ### 2.4 Gerando Tokens JWT
-Para testar, você pode gerar um token JWT com o seguinte payload:
 
-```json
-{
-  "sub": "user123",
-  "groups": ["admin"],
-  "iss": "https://meu-servidor.com"
-}
+Podemos encontra a implementação completa no arquivo [TokenUtils](/src/main/java/com/aktie/auth/TokenUtils.java).
+
 ```
-Depois, assine o JWT usando uma chave privada e envie na requisição:
+Após gerar o token no end-point /auth podemos utilizado nas requests onde o token é obrigatório:
 ```http
 Authorization: Bearer <TOKEN>
 ```
