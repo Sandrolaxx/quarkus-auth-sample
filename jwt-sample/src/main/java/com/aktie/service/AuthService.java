@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.eclipse.microprofile.jwt.Claims;
 import org.jose4j.jwt.JwtClaims;
 
+import com.aktie.auth.GenerateToken;
 import com.aktie.auth.TokenUtils;
 import com.aktie.dto.LoginDTO;
 import com.aktie.dto.TokenDTO;
@@ -23,7 +24,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class AuthService {
 
-    private static Integer DEFAULT_EXPIRATION_TIME = 60;
+    private static Integer DEFAULT_EXPIRATION_TIME = 720;
 
     public TokenDTO genToken(LoginDTO dto) {
 
@@ -35,7 +36,11 @@ public class AuthService {
             throw new CustomException(EnumErrorCode.ERRO_LOGIN);
         }
 
-        return generateToken(user.getEmail(), user.getId().toString(), user.getRole());
+        var jwt = GenerateToken.generate(user.getEmail(), user.getId().toString(), user.getRole());
+
+        return new TokenDTO(jwt, DEFAULT_EXPIRATION_TIME);
+
+        // return generateToken(user.getEmail(), user.getId().toString(), user.getRole());
     }
 
     public TokenDTO generateToken(String email, String uuid, EnumRole role) {
