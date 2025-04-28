@@ -5,6 +5,8 @@ import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Base64;
+import java.util.List;
+import java.util.UUID;
 
 import org.eclipse.microprofile.jwt.Claims;
 import org.jose4j.jws.AlgorithmIdentifiers;
@@ -12,12 +14,36 @@ import org.jose4j.jws.JsonWebSignature;
 import org.jose4j.jwt.JwtClaims;
 import org.jose4j.jwt.NumericDate;
 
+import com.aktie.exception.CustomException;
+import com.aktie.model.EnumErrorCode;
+import com.aktie.model.EnumRole;
+
 /**
  * @author SRamos
  */
 public class TokenUtils {
 
-    public static String generateTokenString(JwtClaims claims) throws Exception {
+    private static Integer DEFAULT_EXPIRATION_TIME = 720;
+
+    public static String generateToken(String email, String uuid, EnumRole role) {
+        try {
+            var jwtClaims = new JwtClaims();
+
+            jwtClaims.setIssuer("SAMPLE-JWT-API");
+            jwtClaims.setJwtId(UUID.randomUUID().toString());
+            jwtClaims.setClaim("uuid", uuid);
+            jwtClaims.setClaim(Claims.preferred_username.name(), email);
+            jwtClaims.setClaim(Claims.groups.name(), List.of(role.getKey()));
+            jwtClaims.setAudience("using-jwt");
+            jwtClaims.setExpirationTimeMinutesInTheFuture(DEFAULT_EXPIRATION_TIME);
+
+            return TokenUtils.generateTokenString(jwtClaims);
+        } catch (Exception e) {
+            throw new CustomException(EnumErrorCode.ERRO_LOGIN_INTERNO);
+        }
+    }
+
+    private static String generateTokenString(JwtClaims claims) throws Exception {
         PrivateKey pk = readPrivateKey("/privateKey.pem");
 
         return generateTokenString(pk, "/privateKey.pem", claims);

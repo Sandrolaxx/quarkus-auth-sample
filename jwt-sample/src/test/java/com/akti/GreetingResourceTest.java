@@ -8,13 +8,14 @@ import static org.hamcrest.CoreMatchers.is;
 
 @QuarkusTest
 class GreetingResourceTest {
+    
     @Test
     void testHelloEndpoint() {
         given()
-          .when().get("/hello")
+          .when().get("/api/v1/user/pub")
           .then()
              .statusCode(200)
-             .body(is("Hello from Quarkus REST"));
+             .body(is("Just a PUBLIC resource"));
     }
 
 }
