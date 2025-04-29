@@ -1,9 +1,11 @@
 # Autenticação JWT no Quarkus
 
 ## 1. O que é JWT?
+
 JSON Web Token (**JWT**) é um padrão para **autenticação e troca de informações seguras** entre partes. Ele é amplamente utilizado para autenticação de usuários em APIs REST e aplicações web.
 
 ### 1.1 Como funciona o JWT?
+
 - O servidor gera um **token JWT** quando um usuário faz login.
 - O token é assinado digitalmente e pode conter informações como ID do usuário e roles.
 - O cliente (ex: frontend ou outra API) armazena o JWT e o envia nas requisições para o servidor.
@@ -118,7 +120,7 @@ Para mais detalhes, consulte a [documentação oficial do Quarkus JWT](https://q
 
 ## 4. Execução do projeto
 
-Se trata de um CRUD simples, criado apenas para apresentar os conceitos de autenticação. Se deseja executar esse projeto em sua máquina, será necessário executar o postgres, recomendo a utilização do docker e deixo o comando abaixo para criação do mesmo.
+Trata-se de um CRUD simples, criado apenas para apresentar os conceitos de autenticação. Se deseja executar esse projeto em sua máquina, será necessário executar o postgres, recomendo a utilização do docker e deixo o comando abaixo para criação do mesmo.
 
 ```bash
 docker run --name pg-sample-jwt -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=root -p 5432:5432 -d postgres:16.2-alpine3.19
@@ -138,3 +140,9 @@ Executando build(Versão de prod):
 ```bash
 java -jar target/quarkus-app/quarkus-run.jar
 ```
+
+---
+
+## Documentação oficial
+
+https://quarkus.io/guides/security-jwt

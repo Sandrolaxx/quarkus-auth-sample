@@ -16,7 +16,7 @@ public class GenerateToken {
                 .upn(email)
                 .groups(role.getKey())
                 .claim("uuid", userId)
-                .audience("using-jwt")
+                .audience("user-service")
                 .expiresIn(DEFAULT_EXPIRATION_TIME)
                 .sign();
     }
